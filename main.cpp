@@ -17,7 +17,6 @@ int main(){
     ifstream readFile;
     readFile.open("SAMPLE");
     if(readFile.is_open()){
-        cout << "file is open!" << endl;
         char arr[256];
         while(!readFile.eof()){
             readFile.getline(arr, 256);
@@ -55,6 +54,7 @@ int main(){
     //     cout << endl;
     // }
     DFS(0, adj_matrix, visited, vertexs.size());
+    cout << endl;
     return 0;
 }
 
