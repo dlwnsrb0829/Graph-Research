@@ -40,19 +40,22 @@ int main(){
     int **adj_matrix;
     adj_matrix = new int *[vertexs.size()];
     for(int i = 0 ; i < vertexs.size() ; i++){
-        adj_matrix[i] = new int[vertexs.size()]{};
+        adj_matrix[i] = new int[vertexs.size()];
+        memset(adj_matrix[i], 0, sizeof(*adj_matrix[i]));
     }
-    bool visited[vertexs.size()] = {false};
+    bool visited[vertexs.size()];
+    memset(visited, false, sizeof(visited));
+
     for(int i = 0 ; i < edges.size() ; i++){
         adj_matrix[edges[i].getEdge()[0]][edges[i].getEdge()[1]] = 1;
         adj_matrix[edges[i].getEdge()[1]][edges[i].getEdge()[0]] = 1;
     }
-    // for(int i = 0 ; i < vertexs.size() ; i++){
-    //     for(int j = 0 ; j < vertexs.size() ; j++){
-    //         cout << adj_matrix[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
+    for(int i = 0 ; i < vertexs.size() ; i++){
+        for(int j = 0 ; j < vertexs.size() ; j++){
+            cout << adj_matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
     DFS(0, adj_matrix, visited, vertexs.size());
     cout << endl;
     return 0;
