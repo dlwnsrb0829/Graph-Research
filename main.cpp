@@ -43,13 +43,14 @@ int main(){
     // for(int i = 0 ; i < edges.size() ; i++){
     //     cout << edges[i].getEdge()[0] << " " << edges[i].getEdge()[1] << endl;
     // }
-    int adjancency_matrix[vertexs.size()][vertexs.size()]{}; // initialization 2-d array to 0
+    int adjancency_matrix[vertexs.size()][vertexs.size()]; // initialization 2-d array to 0
+    memset(adjancency_matrix, 0, sizeof(adjancency_matrix));
     for(int i = 0 ; i < edges.size() ; i++){
         adjancency_matrix[edges[i].getEdge()[0]][edges[i].getEdge()[1]] = 1;
     }
     for(int i = 0 ; i < vertexs.size() ; i++){
         for(int j = 0 ; j < vertexs.size() ; j++){
-            cout << adjancency_matrix[j][i] << " ";
+            cout << adjancency_matrix[i][j] << " ";
         }
         cout << endl;
     }
