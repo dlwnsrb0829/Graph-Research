@@ -9,8 +9,7 @@
 using namespace std;
 
 vector<string> split(string str, char delimiter);
-void DFS(int i, int visited[], int *matrix[]);
-void test(int **matrix, int size);
+void DFS(int i, int **matrix, bool visited[], int size);
 
 int main(){
     vector<vertex> vertexs;
@@ -39,52 +38,23 @@ int main(){
     }
     readFile.close();
 
-    // for(int i = 0 ; i < vertexs.size() ; i++){
-    //     cout << vertexs[i].getId() << " " << vertexs[i].getLabel() << endl;
-    // }
-    // for(int i = 0 ; i < edges.size() ; i++){
-    //     cout << edges[i].getEdge()[0] << " " << edges[i].getEdge()[1] << endl;
-    // }
-
-
-    // int adjancency_matrix[vertexs.size()][vertexs.size()]; // initialization 2-d array to 0
-    // memset(adjancency_matrix, 0, sizeof(adjancency_matrix));
-    // for(int i = 0 ; i < edges.size() ; i++){
-    //     adjancency_matrix[edges[i].getEdge()[0]][edges[i].getEdge()[1]] = 1;
-    // }
-    // for(int i = 0 ; i < vertexs.size() ; i++){
-    //     for(int j = 0 ; j < vertexs.size() ; j++){
-    //         cout << adjancency_matrix[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
-
-    // int visited[vertexs.size()];
-    // memset(visited, 0, sizeof(visited));
-
-    // cout << "test func" << endl;
-    // test(adjancency_matrix);
-
     int **adj_matrix;
     adj_matrix = new int *[vertexs.size()];
     for(int i = 0 ; i < vertexs.size() ; i++){
-        adj_matrix[i] = new int[vertexs.size()];
+        adj_matrix[i] = new int[vertexs.size()]{};
     }
-
+    bool visited[vertexs.size()] = {false};
     for(int i = 0 ; i < edges.size() ; i++){
         adj_matrix[edges[i].getEdge()[0]][edges[i].getEdge()[1]] = 1;
+        adj_matrix[edges[i].getEdge()[1]][edges[i].getEdge()[0]] = 1;
     }
-
-    for(int i = 0 ; i < vertexs.size() ; i++){
-        for(int j = 0 ; j < vertexs.size() ; j++){
-            cout << adj_matrix[i][j] << " ";
-        }
-        cout << endl;
-    }
-    
-    cout << "test" << endl;
-    test(adj_matrix, vertexs.size());
-
+    // for(int i = 0 ; i < vertexs.size() ; i++){
+    //     for(int j = 0 ; j < vertexs.size() ; j++){
+    //         cout << adj_matrix[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+    DFS(0, adj_matrix, visited, vertexs.size());
     return 0;
 }
 
@@ -98,11 +68,12 @@ vector<string> split(string input, char delimiter) {
     return result;
 }
 
-void test(int **matrix, int size){
+void DFS(int u, int** matrix, bool visited[], int size){
+    cout << u << " ";
+    visited[u] = true;
     for(int i = 0 ; i < size ; i++){
-        for(int j = 0 ; j < size ; j++){
-            cout << matrix[i][j] << " ";
+        if(matrix[u][i] == 1 && !visited[i]){
+            DFS(i, matrix, visited, size);
         }
-        cout << endl;
     }
 }
