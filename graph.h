@@ -1,75 +1,39 @@
 #include<iostream>
-#include<sstream>
-#include<vector>
-#include<fstream>
 #include<string>
 #include<stack>
 #include<ctime>
-#include<cstring>
 
 using namespace std;
 
 class graph{
 private:
-    vector<int> split(string input, char delimiter);
     void DFS_use_recursion(int u, bool visited[]);
     int ** adj_matrix;
-    int graph_num;
-    string vertexs;
-    string edges;
+    int * v_labels;
     int v_size;
-    int e_size;
+    int graph_num;
     int start, end;
 public:
     graph(){}
-    graph(int graph_num, string vertexs, string edges, int v_size, int e_size){
-        this->graph_num = graph_num;
-        this->vertexs = vertexs;
-        this->edges = edges;
+    graph(int v_size){
         this->v_size = v_size;
-        this->e_size = e_size;
-        make_graph(vertexs, edges);
+        adj_matrix = new int *[v_size];
+        for(int i = 0 ; i < v_size ; i++){
+            adj_matrix[i] = new int[v_size];
+            memset(adj_matrix[i], 0, sizeof(int) * v_size);
+        }
     }
-    void make_graph(string data, string edges);
-    void print();
-    void get_graph_num();
+    void set_edge(int vertex1, int vertex2, int edge_label);
+    void set_v_labels(int * v_labels);
+    void set_graph_num(int graph_num);
+    void print_matrix();
+    void print_vertex_label();
+    void print_graph_num();
     void DFS_use_recursion();
     void DFS_use_stack();
 };
 
-void graph :: make_graph(string vertesx, string edges){
-    adj_matrix = new int *[v_size];
-    for(int i = 0 ; i < v_size ; i++){
-        adj_matrix[i] = new int[v_size];
-        memset(adj_matrix[i], 0, sizeof(int) * v_size);
-    }
-
-    string temp = "";
-    for(int i = 0 ; i < edges.size() ; i++){
-        int count = 0;
-        switch (edges[i])
-        {
-        case '/':
-            for(int j = 0 ; j < temp.size() ; j++){
-                vector<int> split_vector = split(temp, ' ');
-                adj_matrix[split_vector[0]][split_vector[1]] = split_vector[2];
-                adj_matrix[split_vector[1]][split_vector[0]] = split_vector[2];
-            }
-            temp = "";
-            break;
-        
-        case 'e':
-            i++;
-            break;
-        
-        default:
-            temp += edges[i];
-            break;
-        }
-    }
-}
-
-void graph :: print(){
+void graph :: print_matrix(){
     for(int i = 0 ; i < v_size ; i++){
         for(int j = 0 ; j < v_size ; j++){
             cout << adj_matrix[i][j] << " ";
@@ -77,8 +41,15 @@ void graph :: print(){
         cout << endl;
     }
 }
-void graph :: get_graph_num(){
-    cout << "# " << graph_num << endl;
+
+void graph :: print_vertex_label(){
+    for(int i = 0 ; i < v_size ; i++){
+        cout << "vertex" << i << "'s label : " << v_labels[i] << endl;
+    }
+}
+
+void graph :: print_graph_num(){
+    cout << "# " << this->graph_num << endl; 
 }
 
 void graph :: DFS_use_recursion(){
@@ -102,14 +73,10 @@ void graph :: DFS_use_recursion(int u, bool visited[]){
 
 void graph :: DFS_use_stack() {
     stack<int> stk;
-
     bool visited[v_size];
     memset(visited, false, sizeof(bool) * v_size);
-
     int u = 0;
-
     start = clock();
-
 	int current = u;
 	stk.push(current);
 	visited[current] = true;
@@ -132,12 +99,15 @@ void graph :: DFS_use_stack() {
     cout << "\nuse stack time : " << (double)(end - start) << "ms" << endl;
 }
 
-vector<int> graph :: split(string input, char delimiter) {
-    vector<int> result;
-    stringstream ss(input);
-    string temp;
-    while (getline(ss, temp, delimiter)) {
-        result.push_back(stoi(temp));
-    }
-    return result;
+void graph :: set_edge(int vertex1, int vertex2, int edge_label){
+    this->adj_matrix[vertex1][vertex2] = edge_label;
+    this->adj_matrix[vertex2][vertex1] = edge_label;
+}
+
+void graph :: set_v_labels(int * v_labels){
+    this->v_labels = v_labels;
+}
+
+void graph :: set_graph_num(int graph_num){
+    this->graph_num = graph_num;
 }
